@@ -42,7 +42,60 @@
   </div>
 
   <script>
-    // JavaScript code will go here
+    const mealForm = document.getElementById('meal-form');
+    const mealList = document.querySelector('#meal-list ul');
+    const totalCaloriesSpan = document.getElementById('total-calories');
+    const remainingCaloriesSpan = document.getElementById('remaining-calories');
+    const dailyCalorieLimit = 2000; // this is a placeholder for now but later they can customize
+
+    let meals = []; 
+
+    mealForm.addEventListener('submit', (event) => {
+      event.preventDefault(); 
+      const mealName = document.getElementById('meal-name').value;
+      const calories = parseInt(document.getElementById('calories').value);
+
+      if (mealName && !isNaN(calories)) {
+        // Add the meal to the array
+        meals.push({ name: mealName, calories: calories });
+
+        updateMealList();
+
+        // Update the calorie information display
+        updateCalorieInfo();
+
+        document.getElementById('meal-name').value = '';
+        document.getElementById('calories').value = '';
+      } else {
+        alert('Please enter a valid meal name and calorie amount.');
+      }
+    });
+
+    // Function to update the meal list display
+    function updateMealList() {
+      mealList.innerHTML = '';
+      meals.forEach((meal) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${meal.name} (${meal.calories} calories)`;
+        mealList.appendChild(listItem);
+      });
+    }
+
+    // Function to update the calorie information display
+    function updateCalorieInfo() {
+      const totalCalories = calculateTotalCalories();
+      totalCaloriesSpan.textContent = totalCalories;
+      remainingCaloriesSpan.textContent = dailyCalorieLimit - totalCalories;
+    }
+
+    // Function to calculate total calories
+    function calculateTotalCalories() {
+      let total = 0;
+      meals.forEach((meal) => {
+        total += meal.calories;
+      });
+      return total;
+    }
   </script>
 </body>
 </html>
